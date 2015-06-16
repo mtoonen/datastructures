@@ -9,10 +9,10 @@ package nl.meine.datastructures;
  *
  * @author Meine Toonen
  */
-public class BinaryTree {
+public class BinarySearchTree {
     
     Node root;
-    public BinaryTree(){
+    public BinarySearchTree(){
         
     }
     
@@ -84,7 +84,7 @@ public class BinaryTree {
     }
     
     public static void main (String[] args){
-        BinaryTree bt= new BinaryTree();
+        BinarySearchTree bt= new BinarySearchTree();
         bt.add(5);
         bt.add(3);
         bt.add(1);
