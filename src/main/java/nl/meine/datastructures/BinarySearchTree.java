@@ -5,20 +5,22 @@
  */
 package nl.meine.datastructures;
 
+import nl.meine.datastructures.util.BTPrinter;
+
 /**
  *
  * @author Meine Toonen
  * @param <Type>
  */
-public class BinarySearchTree <Type>{
+public class BinarySearchTree <Type extends Comparable>{
     
-    Node root;
+    Node<Type> root;
     public BinarySearchTree(){
         
     }
     
     public Type get(int key){
-        Node current = root;
+        Node<Type> current = root;
         boolean stop = false;
         while(!stop){
             if(current.key == key){
@@ -80,11 +82,11 @@ public class BinarySearchTree <Type>{
         return s;
     }
     
-    class Node{
-        Node left;
-        Node right;
-        int key;
-        Type object;
+    public static class Node <Type extends Comparable>{
+        public Node left;
+        public Node right;
+        public int key;
+        public Type object;
 
         public Node(int key, Type object) {
             this.key = key;
@@ -129,7 +131,8 @@ public class BinarySearchTree <Type>{
         bt.add(11,"Elf");
         bt.add(9,"Negen");
         bt.add(10,"Tien");
-        System.out.println(bt.toString());
+        BTPrinter.printNode(bt.root);
+        //System.out.println(bt.toString());
         
         System.out.println("11:" + bt.get(11));
         System.out.println("12:" + bt.get(12));
