@@ -215,7 +215,5 @@ public class BinarySearchTree <Type extends Comparable>{
 
         bt.remove(5);
         BTPrinter.printNode(bt.root);
-
-
     }
 }
