@@ -5,6 +5,8 @@
  */
 package nl.meine.datastructures;
 
+import java.util.ArrayList;
+import java.util.List;
 import nl.meine.datastructures.util.BTPrinter;
 
 /**
@@ -13,14 +15,23 @@ import nl.meine.datastructures.util.BTPrinter;
  * @param <Type>
  */
 public class BinarySearchTree <Type extends Comparable>{
-    
+    private int counter = 0;
     Node<Type> root;
     public BinarySearchTree(){
         
     }
     
     public Type get(int key){
-        Node<Type> current = root;
+       Node n = getNode(key);
+       if(n == null){
+           return null;
+       }else{
+           return (Type)n.object;
+       }
+    }
+
+    private Node getNode(int key){
+         Node<Type> current = root;
         boolean stop = false;
         while(!stop){
             if(current.key == key){
@@ -44,21 +55,45 @@ public class BinarySearchTree <Type extends Comparable>{
             }
         }
         if(current != null){
-            return current.object;
+            return current;
         }else{
             return null;
         }
     }
+
+    public List<Type> values(){
+        return values(root, new ArrayList<Type>());
+    }
+
+    private List<Type> values(Node n, List<Type> values){
+        
+        values.add((Type) n.object);
+        if (n.left != null) {
+            values(n.left, values);
+        }
+        if (n.right != null) {
+            values(n.right, values);
+        }
+        
+
+        return values;
+
+    }
+
+    public void add(Type value){
+        add(value.hashCode(), value);
+    }
     
     public void add(int key, Type value){
+        counter ++;
         if( root == null){
-            root = new Node(key,value);
+            root = new Node(key,value,null);
         }else{
             Node current = root;
-            Node newNode = new Node(key,value);
             while (true){
                 if( key <= current.key ){
                     if(current.left == null){
+                        Node newNode = new Node(key,value, current);
                         current.left = newNode;
                         return;
                     }else{
@@ -66,6 +101,7 @@ public class BinarySearchTree <Type extends Comparable>{
                     }
                 }else{
                     if(current.right == null){
+                        Node newNode = new Node(key,value, current);
                         current.right = newNode;
                         return;
                     }else{
@@ -85,12 +121,14 @@ public class BinarySearchTree <Type extends Comparable>{
     public static class Node <Type extends Comparable>{
         public Node left;
         public Node right;
+        public Node parent;
         public int key;
         public Type object;
 
-        public Node(int key, Type object) {
+        public Node(int key, Type object, Node parent) {
             this.key = key;
             this.object = object;
+            this.parent = parent;
         }
 
         public Node() {
@@ -132,7 +170,8 @@ public class BinarySearchTree <Type extends Comparable>{
         bt.add(9,"Negen");
         bt.add(10,"Tien");
         BTPrinter.printNode(bt.root);
-        //System.out.println(bt.toString());
+        List<String> vals = bt.values();
+        System.out.println(bt.values());
         
         System.out.println("11:" + bt.get(11));
         System.out.println("12:" + bt.get(12));
