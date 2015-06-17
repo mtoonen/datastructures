@@ -60,14 +60,49 @@ public class BinarySearchTree <Type extends Comparable>{
             return null;
         }
     }
-
-    public List<Type> values(){
-        return values(root, new ArrayList<Type>());
+    
+    public void remove(Type value){
+        remove(value.hashCode());
     }
 
-    private List<Type> values(Node n, List<Type> values){
-        
-        values.add((Type) n.object);
+    public void remove(int key){
+        counter--;
+        Node n = getNode(key);
+        if(n != null){
+            Node parent = n.parent;
+            if (parent != null) {
+                if (parent.left == n) {
+                    parent.left = null;
+                } else {
+                    parent.right = null;
+                }
+            }else{
+                root = null;
+            }
+
+            List<Node> subtreevalues = values(n, null);
+            subtreevalues.remove(n);
+            for (Node node : subtreevalues) {
+                this.add(node.key, (Type)node.object);
+            }
+        }
+    }
+
+    public List<Type> values(){
+        List<Node> nodes = values(root, null);
+        List<Type> values = new ArrayList<>(nodes.size());
+        for (Node node : nodes) {
+            values.add((Type)node.object);
+        }
+        return values;
+    }
+
+
+    private List<Node> values(Node n, List<Node> values){
+        if(values == null){
+            values = new ArrayList<>();
+        }
+        values.add( n);
         if (n.left != null) {
             values(n.left, values);
         }
@@ -171,11 +206,16 @@ public class BinarySearchTree <Type extends Comparable>{
         bt.add(10,"Tien");
         BTPrinter.printNode(bt.root);
         List<String> vals = bt.values();
-        System.out.println(bt.values());
+        System.out.println(vals);
         
         System.out.println("11:" + bt.get(11));
         System.out.println("12:" + bt.get(12));
         System.out.println("1" + bt.get(1));
         System.out.println("4" + bt.get(4));
+
+        bt.remove(5);
+        BTPrinter.printNode(bt.root);
+
+
     }
 }

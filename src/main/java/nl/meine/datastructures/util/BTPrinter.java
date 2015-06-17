@@ -37,7 +37,7 @@ public class BTPrinter {
         List<Node<T>> newNodes = new ArrayList<Node<T>>();
         for (Node<T> node : nodes) {
             if (node != null) {
-                System.out.print(node.object);
+                System.out.print(node.key);
                 newNodes.add(node.left);
                 newNodes.add(node.right);
 
