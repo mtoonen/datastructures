@@ -88,21 +88,55 @@ public class BinarySearchTree <Type extends Comparable>{
         }
     }
 
-    public List<Type> getLeftToRight(){
-        List<Type> nodes = new ArrayList<>();
-        getLeftToRight(root, nodes);
+    public List<Node> getLeftToRight(){
+        List<Node> nodes = getLeftToRight(root);
         return nodes;
     }
 
-    public void getLeftToRight(Node node, List<Type> nodes){
+    private List<Node> getLeftToRight(Node node){
+        List<Node> nodes = new ArrayList<>();
+        getLeftToRight(node, nodes);
+        return nodes;
+    }
+
+    private void getLeftToRight(Node node, List<Node> nodes){
         if(node == null){
             return;
         }
         getLeftToRight(node.left, nodes);
-        nodes.add((Type)node.object);
+        nodes.add(node);
         getLeftToRight(node.right, nodes);
     }
 
+    private void balance (Node[] array){
+       
+        int mid =array.length/2;
+        Node midNode = array[mid];
+        this.add(midNode.key,(Type)midNode.object);
+        if(array.length == 1){
+            return;
+        }
+
+        Node[] small = new Node[mid];
+        System.arraycopy(array, 0, small, 0, mid);
+
+        Node[] large =  new Node[mid - 1];
+        System.arraycopy(array, mid + 1, large, 0, mid - 1);
+
+        balance(small);
+
+        if(large != null && large.length > 0){
+            balance(large);
+        }
+    }
+
+    public void balance(){
+        List<Node> list = getLeftToRight(this.root);
+        this.root = null;
+        Node[] array  = list.toArray(new Node[0]);
+
+        balance(array);
+    }
 
     private List<Node> getSubTree(Node n, List<Node> values){
         if(values == null){
@@ -218,12 +252,16 @@ public class BinarySearchTree <Type extends Comparable>{
 
         //bt.remove(5);
         //bt.remove(3);
-        BTPrinter.printNode(bt.root);
-        List<String> nodes = bt.getLeftToRight();
-        for (String node : nodes) {
-            System.out.print(node + ", ");
+       // BTPrinter.printNode(bt.root);
+        List<Node> nodes = bt.getLeftToRight();
+        for (Node node : nodes) {
+            System.out.print(node.object + ", ");
         }
          System.out.println();
+         System.out.println(bt);
+         bt.balance();
+         System.out.println(bt);
+        BTPrinter.printNode(bt.root);
         
     }
 }
