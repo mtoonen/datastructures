@@ -80,7 +80,7 @@ public class BinarySearchTree <Type extends Comparable>{
                 root = null;
             }
 
-            List<Node> subtreevalues = values(n, null);
+            List<Node> subtreevalues = getSubTree(n, null);
             subtreevalues.remove(n);
             for (Node node : subtreevalues) {
                 this.add(node.key, (Type)node.object);
@@ -88,31 +88,35 @@ public class BinarySearchTree <Type extends Comparable>{
         }
     }
 
-    public List<Type> values(){
-        List<Node> nodes = values(root, null);
-        List<Type> values = new ArrayList<>(nodes.size());
-        for (Node node : nodes) {
-            values.add((Type)node.object);
+    public List<Type> getLeftToRight(){
+        List<Type> nodes = new ArrayList<>();
+        getLeftToRight(root, nodes);
+        return nodes;
+    }
+
+    public void getLeftToRight(Node node, List<Type> nodes){
+        if(node == null){
+            return;
         }
-        return values;
+        getLeftToRight(node.left, nodes);
+        nodes.add((Type)node.object);
+        getLeftToRight(node.right, nodes);
     }
 
 
-    private List<Node> values(Node n, List<Node> values){
+    private List<Node> getSubTree(Node n, List<Node> values){
         if(values == null){
             values = new ArrayList<>();
         }
         values.add( n);
         if (n.left != null) {
-            values(n.left, values);
+            getSubTree(n.left, values);
         }
         if (n.right != null) {
-            values(n.right, values);
+            getSubTree(n.right, values);
         }
-        
 
         return values;
-
     }
 
     public void add(Type value){
@@ -186,7 +190,6 @@ public class BinarySearchTree <Type extends Comparable>{
                     s += ")";
                 }
             }
-            
             return s;
         }
         
@@ -194,26 +197,33 @@ public class BinarySearchTree <Type extends Comparable>{
     
     public static void main (String[] args){
         BinarySearchTree<String> bt= new BinarySearchTree<>();
-        bt.add(5, "Vijf");
-        bt.add(3, "Drie");
         bt.add(1,"Een");
-        bt.add(4,"Vier");
         bt.add(2,"Twee");
-        bt.add(8,"Acht");
+        bt.add(3, "Drie");
+        bt.add(4,"Vier");
+        bt.add(5, "Vijf");
         bt.add(6,"Zes");
-        bt.add(11,"Elf");
+        bt.add(8,"Acht");
         bt.add(9,"Negen");
         bt.add(10,"Tien");
-        BTPrinter.printNode(bt.root);
-        List<String> vals = bt.values();
-        System.out.println(vals);
+        bt.add(11,"Elf");
+       // BTPrinter.printNode(bt.root);
+        //List<String> vals = bt.values();
+       // System.out.println(vals);
         
         System.out.println("11:" + bt.get(11));
         System.out.println("12:" + bt.get(12));
         System.out.println("1" + bt.get(1));
-        System.out.println("4" + bt.get(4));
+       // System.out.println("4" + bt.get(4));
 
-        bt.remove(5);
+        //bt.remove(5);
+        //bt.remove(3);
         BTPrinter.printNode(bt.root);
+        List<String> nodes = bt.getLeftToRight();
+        for (String node : nodes) {
+            System.out.print(node + ", ");
+        }
+         System.out.println();
+        
     }
 }
