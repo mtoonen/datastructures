@@ -5,6 +5,7 @@
  */
 package nl.meine.datastructures;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import nl.meine.datastructures.util.BTPrinter;
@@ -14,11 +15,10 @@ import nl.meine.datastructures.util.BTPrinter;
  * @author Meine Toonen
  * @param <Type>
  */
-public class BinarySearchTree <Type extends Comparable>{
+public class BinarySearchTree <Type extends Comparable<Type>>{
     private int counter = 0;
-    Node<Type> root;
+    Node root;
     public BinarySearchTree(){
-        
     }
     
     public Type get(int key){
@@ -26,12 +26,12 @@ public class BinarySearchTree <Type extends Comparable>{
        if(n == null){
            return null;
        }else{
-           return (Type)n.object;
+           return n.object;
        }
     }
 
     private Node getNode(int key){
-         Node<Type> current = root;
+        Node current = root;
         boolean stop = false;
         while(!stop){
             if(current.key == key){
@@ -83,7 +83,7 @@ public class BinarySearchTree <Type extends Comparable>{
             List<Node> subtreevalues = getSubTree(n, null);
             subtreevalues.remove(n);
             for (Node node : subtreevalues) {
-                this.add(node.key, (Type)node.object);
+                this.add(node.key, node.object);
             }
         }
     }
@@ -109,18 +109,17 @@ public class BinarySearchTree <Type extends Comparable>{
     }
 
     private void balance (Node[] array){
-       
         int mid =array.length/2;
         Node midNode = array[mid];
-        this.add(midNode.key,(Type)midNode.object);
+        this.add(midNode.key,midNode.object);
         if(array.length == 1){
             return;
         }
 
-        Node[] small = new Node[mid];
+        Node[] small = (Node[])Array.newInstance(Node.class, mid);// (Node[])new Node[mid];
         System.arraycopy(array, 0, small, 0, mid);
 
-        Node[] large =  new Node[mid - 1];
+        Node[] large = (Node[])Array.newInstance(Node.class, mid-1);// new Node[mid - 1];
         System.arraycopy(array, mid + 1, large, 0, mid - 1);
 
         balance(small);
@@ -133,7 +132,7 @@ public class BinarySearchTree <Type extends Comparable>{
     public void balance(){
         List<Node> list = getLeftToRight(this.root);
         this.root = null;
-        Node[] array  = list.toArray(new Node[0]);
+        Node[] array  = list.toArray((Node[])Array.newInstance(Node.class, 0)); //new Node[0]);
 
         balance(array);
     }
@@ -156,6 +155,10 @@ public class BinarySearchTree <Type extends Comparable>{
     public void add(Type value){
         add(value.hashCode(), value);
     }
+
+    public int size(){
+        return counter;
+    }
     
     public void add(int key, Type value){
         counter ++;
@@ -163,6 +166,7 @@ public class BinarySearchTree <Type extends Comparable>{
             root = new Node(key,value,null);
         }else{
             Node current = root;
+            Type t = root.object;
             while (true){
                 if( key <= current.key ){
                     if(current.left == null){
@@ -191,7 +195,7 @@ public class BinarySearchTree <Type extends Comparable>{
         return s;
     }
     
-    public static class Node <Type extends Comparable>{
+    public class Node{
         public Node left;
         public Node right;
         public Node parent;
@@ -206,7 +210,7 @@ public class BinarySearchTree <Type extends Comparable>{
 
         public Node() {
         }
-        
+
         @Override
         public String toString(){
             String s = "" + key;
@@ -253,8 +257,8 @@ public class BinarySearchTree <Type extends Comparable>{
         //bt.remove(5);
         //bt.remove(3);
        // BTPrinter.printNode(bt.root);
-        List<Node> nodes = bt.getLeftToRight();
-        for (Node node : nodes) {
+        List<BinarySearchTree<String>.Node> nodes = bt.getLeftToRight();
+        for (BinarySearchTree.Node node : nodes) {
             System.out.print(node.object + ", ");
         }
          System.out.println();

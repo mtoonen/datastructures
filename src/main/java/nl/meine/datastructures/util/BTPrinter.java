@@ -17,13 +17,13 @@ import nl.meine.datastructures.BinarySearchTree.Node;
 
 public class BTPrinter {
 
-    public static <T extends Comparable> void printNode(Node<T> root) {
+    public static  void printNode(Node root) {
         int maxLevel = BTPrinter.maxLevel(root);
 
         printNodeInternal(Collections.singletonList(root), 1, maxLevel);
     }
 
-    private static <T extends Comparable<?>> void printNodeInternal(List<Node<T>> nodes, int level, int maxLevel) {
+    private static  void printNodeInternal(List<Node> nodes, int level, int maxLevel) {
         if (nodes.isEmpty() || BTPrinter.isAllElementsNull(nodes))
             return;
 
@@ -34,8 +34,8 @@ public class BTPrinter {
 
         BTPrinter.printWhitespaces(firstSpaces);
 
-        List<Node<T>> newNodes = new ArrayList<Node<T>>();
-        for (Node<T> node : nodes) {
+        List<Node> newNodes = new ArrayList<Node>();
+        for (Node node : nodes) {
             if (node != null) {
                 System.out.print(node.key);
                 newNodes.add(node.left);
@@ -85,7 +85,7 @@ public class BTPrinter {
             System.out.print(" ");
     }
 
-    private static <T extends Comparable<?>> int maxLevel(Node<T> node) {
+    private static int maxLevel(Node node) {
         if (node == null)
             return 0;
 
