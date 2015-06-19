@@ -7,6 +7,8 @@ package nl.meine.datastructures;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import nl.meine.datastructures.util.BTPrinter;
 
@@ -15,7 +17,7 @@ import nl.meine.datastructures.util.BTPrinter;
  * @author Meine Toonen
  * @param <Type>
  */
-public class BinarySearchTree <Type extends Comparable<Type>>{
+public class BinarySearchTree <Type extends Comparable<Type>> implements Collection<Type>{
     private int counter = 0;
     Node root;
     public BinarySearchTree(){
@@ -61,11 +63,11 @@ public class BinarySearchTree <Type extends Comparable<Type>>{
         }
     }
     
-    public void remove(Type value){
-        remove(value.hashCode());
+    public boolean remove(Type value){
+        return remove(value.hashCode());
     }
 
-    public void remove(int key){
+    public boolean remove(int key){
         counter--;
         Node n = getNode(key);
         if(n != null){
@@ -85,8 +87,130 @@ public class BinarySearchTree <Type extends Comparable<Type>>{
             for (Node node : subtreevalues) {
                 this.add(node.key, node.object);
             }
+            return true;
+        }else{
+            return false;
         }
     }
+
+    @Override
+    public boolean add(Type value){
+        return add(value.hashCode(), value);
+    }
+
+    @Override
+    public int size(){
+        return counter;
+    }
+    
+    public boolean add(int key, Type value){
+        counter ++;
+        if( root == null){
+            root = new Node(key,value,null);
+            return true;
+        }else{
+            Node current = root;
+            while (true){
+                if( key <= current.key ){
+                    if(current.left == null){
+                        Node newNode = new Node(key,value, current);
+                        current.left = newNode;
+                        return true;
+                    }else{
+                        current = current.left;
+                    }
+                }else{
+                    if(current.right == null){
+                        Node newNode = new Node(key,value, current);
+                        current.right = newNode;
+                        return true;
+                    }else{
+                        current = current.right;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * Interface methods
+     */
+
+    @Override
+    public String toString(){
+        String s = root != null ? root.toString() : "";
+        return s;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return counter == 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterator<Type> iterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object[] toArray() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Type> c) {
+        boolean changed = false;
+        for (Type instance : c) {
+            changed |= this.add(instance);
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        if (this.root == null){
+            return false;
+        }else{
+            this.root = null;
+            return true;
+        }
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clear() {
+        this.root = null;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return remove((Type)o);
+    }
+
+    /**
+     * Helper methods
+     */
+
 
     public List<Node> getLeftToRight(){
         List<Node> nodes = getLeftToRight(root);
@@ -152,48 +276,9 @@ public class BinarySearchTree <Type extends Comparable<Type>>{
         return values;
     }
 
-    public void add(Type value){
-        add(value.hashCode(), value);
-    }
-
-    public int size(){
-        return counter;
-    }
-    
-    public void add(int key, Type value){
-        counter ++;
-        if( root == null){
-            root = new Node(key,value,null);
-        }else{
-            Node current = root;
-            Type t = root.object;
-            while (true){
-                if( key <= current.key ){
-                    if(current.left == null){
-                        Node newNode = new Node(key,value, current);
-                        current.left = newNode;
-                        return;
-                    }else{
-                        current = current.left;
-                    }
-                }else{
-                    if(current.right == null){
-                        Node newNode = new Node(key,value, current);
-                        current.right = newNode;
-                        return;
-                    }else{
-                        current = current.right;
-                    }
-                }
-            }
-        }
-    }
-    
-    @Override
-    public String toString(){
-        String s = root != null ? root.toString() : "";
-        return s;
-    }
+    /**
+     * Inner class representing the nodes
+     */
     
     public class Node{
         public Node left;
