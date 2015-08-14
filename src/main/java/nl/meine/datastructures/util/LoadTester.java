@@ -23,7 +23,7 @@ import nl.meine.datastructures.BinarySearchTree;
 public class LoadTester {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        File f = new File("/usr/share/dict/dutch");
+        File f = new File("/usr/share/dict/words");
 
         List<String> words = new ArrayList<>();
         List<Integer> hashcodes = new ArrayList<>();
@@ -35,7 +35,7 @@ public class LoadTester {
             hashcodes.add(word.hashCode());
         }
         System.out.println("Words:" + words.size());
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 12; i++) {
             
         testHashmap(words, hashcodes);
         testBSP(words, hashcodes);
@@ -47,14 +47,14 @@ public class LoadTester {
                 System.out.println("***********************");
         System.out.println("Start test BSP:");
         BinarySearchTree<String> bsp = new BinarySearchTree<>();
-        System.out.println("Reading:");
+        System.out.println("writing:");
         Date start = new Date();
         
         for (String w : words) {
             bsp.add(w.hashCode(), w);
         }
         Date end = new Date();
-        System.out.println("Reading done in: " + (end.getTime() - start.getTime()));
+        System.out.println("writing done in: " + (end.getTime() - start.getTime()));
         System.out.println("Random reads:");
         int max = words.size() -1;
         long total = 0;
@@ -75,14 +75,14 @@ public class LoadTester {
                 System.out.println("***********************");
         System.out.println("Start test HashMap:");
         HashMap<Integer,String> bsp = new HashMap<>();
-        System.out.println("Reading:");
+        System.out.println("writing:");
         Date start = new Date();
         
         for (String w : words) {
             bsp.put(w.hashCode(), w);
         }
         Date end = new Date();
-        System.out.println("Reading done in: " + (end.getTime() - start.getTime()));
+        System.out.println("writing done in: " + (end.getTime() - start.getTime()));
         System.out.println("Random reads:");
         int max = words.size() -1;
         long total = 0;
